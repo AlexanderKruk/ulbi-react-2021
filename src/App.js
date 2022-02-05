@@ -1,28 +1,35 @@
-import { useState } from "react";
+import "./styles/App.css";
 
 function App() {
-  const [num, setNum] = useState(0);
-  const [value, setValue] = useState("");
-
-  const inc = () => {
-    setNum(num + 1);
-  };
-
-  const dec = () => {
-    setNum(num - 1);
-  };
-
   return (
-    <div>
-      <h1>{num}</h1>
-      <h1>{value}</h1>
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-      <button onClick={inc}>+</button>
-      <button onClick={dec}>-</button>
+    <div className="app">
+      <div className="post">
+        <div className="post__content">
+          <strong>1. Javascript</strong>
+          <div>JS programmin language</div>
+        </div>
+        <div className="post__btns">
+          <button>Delete</button>
+        </div>
+      </div>
+      <div className="post">
+        <div className="post__content">
+          <strong>1. Javascript</strong>
+          <div>JS programmin language</div>
+        </div>
+        <div className="post__btns">
+          <button>Delete</button>
+        </div>
+      </div>
+      <div className="post">
+        <div className="post__content">
+          <strong>1. Javascript</strong>
+          <div>JS programmin language</div>
+        </div>
+        <div className="post__btns">
+          <button>Delete</button>
+        </div>
+      </div>
     </div>
   );
 }
