@@ -1,24 +1,59 @@
 import { useState } from "react";
+import { PostForm } from "./components/PostForm";
 import { PostList } from "./components/PostList";
+import { MySelect } from "./components/UI/Select/MySelect";
 import "./styles/App.css";
 
 function App() {
   const [posts, setPosts] = useState([
-    { id: 1, title: "Javascript", description: "JS programmin language" },
-    { id: 2, title: "Javascript", description: "JS programmin language" },
-    { id: 3, title: "Javascript", description: "JS programmin language" },
+    { id: 1, title: "A", description: "B" },
+    { id: 2, title: "C", description: "C" },
+    { id: 3, title: "B", description: "A" },
   ]);
 
-  const [posts2, setPosts2] = useState([
-    { id: 1, title: "Python", description: "JS programmin language" },
-    { id: 2, title: "Python", description: "JS programmin language" },
-    { id: 3, title: "Python", description: "JS programmin language" },
-  ]);
+  const options = [
+    { value: "title", name: "By title" },
+    { value: "description", name: "By description" },
+  ];
+
+  const [selectedValue, setSelectedValue] = useState("");
+
+  const addPost = (e, post) => {
+    e.preventDefault();
+    setPosts([...posts, { ...post, id: Date.now() }]);
+  };
+
+  const deletePost = (id) => {
+    setPosts(posts.filter((post) => post.id !== id));
+  };
+
+  const selectOnChange = (e) => {
+    setSelectedValue(e.target.value);
+    setPosts(
+      [...posts].sort((a, b) =>
+        a[e.target.value].localeCompare(b[e.target.value])
+      )
+    );
+  };
 
   return (
     <div className="app">
-      <PostList posts={posts} title={"List of posts"} />
-      <PostList posts={posts2} title={"List of posts"} />
+      <PostForm addPost={addPost} />
+      <MySelect
+        options={options}
+        defaultValue={"Choose sort"}
+        selectedValue={selectedValue}
+        onChange={selectOnChange}
+      />
+      {posts.length < 1 ? (
+        <h1 style={{ textAlign: "center", marginTop: 100 }}>Posts not found</h1>
+      ) : (
+        <PostList
+          posts={posts}
+          title={"List of posts"}
+          deletePost={deletePost}
+        />
+      )}
     </div>
   );
 }
