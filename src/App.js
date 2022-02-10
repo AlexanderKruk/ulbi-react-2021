@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { PostForm } from "./components/PostForm";
 import { PostList } from "./components/PostList";
-import { MySelect } from "./components/UI/Select/MySelect";
 import "./styles/App.css";
+import { PostFilter } from "./components/PostFilter";
 
 function App() {
   const [posts, setPosts] = useState([
@@ -11,12 +11,7 @@ function App() {
     { id: 3, title: "B", description: "A" },
   ]);
 
-  const options = [
-    { value: "title", name: "By title" },
-    { value: "description", name: "By description" },
-  ];
-
-  const [selectedValue, setSelectedValue] = useState("");
+  const [filter, setFilter] = useState({ sort: "", query: "" });
 
   const addPost = (e, post) => {
     e.preventDefault();
@@ -27,33 +22,31 @@ function App() {
     setPosts(posts.filter((post) => post.id !== id));
   };
 
-  const selectOnChange = (e) => {
-    setSelectedValue(e.target.value);
-    setPosts(
-      [...posts].sort((a, b) =>
-        a[e.target.value].localeCompare(b[e.target.value])
-      )
+  const sortedPosts = useMemo(() => {
+    if (filter.sort) {
+      return [...posts].sort((a, b) =>
+        a[filter.sort].localeCompare(b[filter.sort])
+      );
+    }
+    return posts;
+  }, [filter.sort, posts]);
+
+  const sortedAndSearchedPosts = useMemo(() => {
+    return sortedPosts.filter((post) =>
+      post.title.toLowerCase().includes(filter.query.toLowerCase())
     );
-  };
+  }, [filter.query, sortedPosts]);
 
   return (
     <div className="app">
       <PostForm addPost={addPost} />
-      <MySelect
-        options={options}
-        defaultValue={"Choose sort"}
-        selectedValue={selectedValue}
-        onChange={selectOnChange}
+      <hr style={{ margin: "20px 0px" }} />
+      <PostFilter filter={filter} setFilter={setFilter} />
+      <PostList
+        posts={sortedAndSearchedPosts}
+        title={"List of posts"}
+        deletePost={deletePost}
       />
-      {posts.length < 1 ? (
-        <h1 style={{ textAlign: "center", marginTop: 100 }}>Posts not found</h1>
-      ) : (
-        <PostList
-          posts={posts}
-          title={"List of posts"}
-          deletePost={deletePost}
-        />
-      )}
     </div>
   );
 }
