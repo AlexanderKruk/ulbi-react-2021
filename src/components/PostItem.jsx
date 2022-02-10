@@ -1,14 +1,14 @@
 import React from 'react';
 
-export const PostItem = (props) => {
+export const PostItem = ({index, post, deletePost}) => {
   return(
     <div className="post">
       <div className="post__content">
-        <strong>{props.post.id}. {props.post.title}</strong>
-        <div>{props.post.description}</div>
+        <strong>{index + 1}. {post.title}</strong>
+        <div>{post.description}</div>
       </div>
       <div className="post__btns">
-        <button>Delete</button>
+        <button onClick={() => deletePost(post.id)}>Delete</button>
       </div>
   </div>
   );
