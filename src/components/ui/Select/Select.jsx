@@ -1,4 +1,4 @@
-export const MySelect = ({options, defaultValue, selectedValue, onChange}) => {
+export const Select = ({options, defaultValue, selectedValue, onChange}) => {
 
   return (
   <div>

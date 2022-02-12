@@ -1,9 +1,9 @@
 import React from 'react';
-import styles from './MyModal.module.css'
+import styles from './Modal.module.css'
 
-export const MyModal = ({children, visible, setVisible}) => {
+export const Modal = ({children, visible, setVisible}) => {
 
-  const rootClass = [styles.myModal]
+  const rootClass = [styles.modal]
 
   if(visible) {
     rootClass.push(styles.active)
@@ -11,7 +11,7 @@ export const MyModal = ({children, visible, setVisible}) => {
 
   return (
     <div className={rootClass.join(' ')} onClick={() => setVisible(false)}>
-      <div className={styles.myModalContent} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         {children}
       </div>
     </div>

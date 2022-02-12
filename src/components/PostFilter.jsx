@@ -1,6 +1,6 @@
 import React from 'react';
-import { MyInput } from './ui/MyInput/MyInput'
-import { MySelect } from './ui/MySelect/MySelect';
+import { Input } from './ui/Input/Input'
+import { Select } from './ui/Select/Select';
 
 export const PostFilter = ({filter, setFilter}) => {
 
@@ -15,12 +15,12 @@ export const PostFilter = ({filter, setFilter}) => {
 
   return (
     <div>
-      <MyInput
+      <Input
         type="text"
         value={filter.query}
         onChange={(e) => setFilter({...filter, query: e.target.value})}
       />
-      <MySelect
+      <Select
         options={options}
         defaultValue={"Choose sort"}
         selectedValue={filter.sort}

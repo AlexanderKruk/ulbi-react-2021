@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { MyButton } from "./ui/MyButton/MyButton";
-import { MyInput } from "./ui/MyInput/MyInput";
+import { Button } from "./ui/Button/Button";
+import { Input } from "./ui/Input/Input";
 
 export const PostForm = ({addPost}) => {
 
@@ -8,19 +8,19 @@ export const PostForm = ({addPost}) => {
 
   return (
     <>
-      <MyInput
+      <Input
         type="text"
         placeholder="Title"
         value={post.title}
         onChange={(e) => setPost({ ...post, title: e.target.value })}
       />
-      <MyInput
+      <Input
         type="text"
         placeholder="Description"
         value={post.description}
         onChange={(e) => setPost({ ...post, description: e.target.value })}
       />
-      <MyButton onClick={(e) => addPost(e, post)}>Create post</MyButton>
+      <Button onClick={(e) => addPost(e, post)}>Create post</Button>
     </>
   );
 };

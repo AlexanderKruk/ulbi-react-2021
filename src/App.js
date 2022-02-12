@@ -3,8 +3,8 @@ import { PostForm } from "./components/PostForm";
 import { PostList } from "./components/PostList";
 import "./styles/App.css";
 import { PostFilter } from "./components/PostFilter";
-import { MyModal } from "./components/ui/MyModal/MyModal";
-import { MyButton } from "./components/ui/MyButton/MyButton";
+import { Modal } from "./components/ui/Modal/Modal";
+import { Button } from "./components/ui/Button/Button";
 import { usePosts } from "./hooks/usePosts";
 import { PostService } from "./api/PostService";
 
@@ -12,6 +12,7 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState({ sort: "", query: "" });
   const [visibleModal, setVisibleModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const sortedAndSearchedPosts = usePosts(filter.sort, posts, filter.query);
 
@@ -30,25 +31,35 @@ function App() {
   };
 
   const fetchPosts = async () => {
-    const response = await PostService.getAll();
-    setPosts(response.data);
+    setLoading(true);
+    setTimeout(async () => {
+      const response = await PostService.getAll();
+      setLoading(false);
+      if (response) {
+        setPosts(response.data);
+      }
+    }, 1000);
   };
 
   return (
     <div className="app">
-      <MyButton style={{ marginTop: 20 }} onClick={() => setVisibleModal(true)}>
+      <Button style={{ marginTop: 20 }} onClick={() => setVisibleModal(true)}>
         Create post
-      </MyButton>
-      <MyModal visible={visibleModal} setVisible={setVisibleModal}>
+      </Button>
+      <Modal visible={visibleModal} setVisible={setVisibleModal}>
         <PostForm addPost={addPost} />
-      </MyModal>
+      </Modal>
       <hr style={{ margin: "20px 0px" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
-      <PostList
-        posts={sortedAndSearchedPosts}
-        title={"List of posts"}
-        deletePost={deletePost}
-      />
+      {loading ? (
+        <h1>Loading</h1>
+      ) : (
+        <PostList
+          posts={sortedAndSearchedPosts}
+          title={"List of posts"}
+          deletePost={deletePost}
+        />
+      )}
     </div>
   );
 }
