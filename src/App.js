@@ -6,7 +6,7 @@ import { PostFilter } from "./components/PostFilter";
 import { MyModal } from "./components/ui/MyModal/MyModal";
 import { MyButton } from "./components/ui/MyButton/MyButton";
 import { usePosts } from "./hooks/usePosts";
-import axios from "axios";
+import { PostService } from "./api/PostService";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -16,7 +16,7 @@ function App() {
   const sortedAndSearchedPosts = usePosts(filter.sort, posts, filter.query);
 
   useEffect(() => {
-    console.log("Use effect");
+    fetchPosts();
   }, []);
 
   const addPost = (e, post) => {
@@ -30,15 +30,12 @@ function App() {
   };
 
   const fetchPosts = async () => {
-    const response = await axios.get(
-      "https://jsonplaceholder.typicode.com/posts"
-    );
+    const response = await PostService.getAll();
     setPosts(response.data);
   };
 
   return (
     <div className="app">
-      <MyButton onClick={fetchPosts}>Fetch posts</MyButton>
       <MyButton style={{ marginTop: 20 }} onClick={() => setVisibleModal(true)}>
         Create post
       </MyButton>
