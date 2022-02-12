@@ -1,45 +1,50 @@
-import { useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { PostForm } from "./components/PostForm";
 import { PostList } from "./components/PostList";
 import "./styles/App.css";
 import { PostFilter } from "./components/PostFilter";
+import { MyModal } from "./components/ui/MyModal/MyModal";
+import { MyButton } from "./components/ui/MyButton/MyButton";
+import { usePosts } from "./hooks/usePosts";
+import axios from "axios";
 
 function App() {
-  const [posts, setPosts] = useState([
-    { id: 1, title: "A", description: "B" },
-    { id: 2, title: "C", description: "C" },
-    { id: 3, title: "B", description: "A" },
-  ]);
-
+  const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState({ sort: "", query: "" });
+  const [visibleModal, setVisibleModal] = useState(false);
+
+  const sortedAndSearchedPosts = usePosts(filter.sort, posts, filter.query);
+
+  useEffect(() => {
+    console.log("Use effect");
+  }, []);
 
   const addPost = (e, post) => {
     e.preventDefault();
     setPosts([...posts, { ...post, id: Date.now() }]);
+    setVisibleModal(false);
   };
 
   const deletePost = (id) => {
     setPosts(posts.filter((post) => post.id !== id));
   };
 
-  const sortedPosts = useMemo(() => {
-    if (filter.sort) {
-      return [...posts].sort((a, b) =>
-        a[filter.sort].localeCompare(b[filter.sort])
-      );
-    }
-    return posts;
-  }, [filter.sort, posts]);
-
-  const sortedAndSearchedPosts = useMemo(() => {
-    return sortedPosts.filter((post) =>
-      post.title.toLowerCase().includes(filter.query.toLowerCase())
+  const fetchPosts = async () => {
+    const response = await axios.get(
+      "https://jsonplaceholder.typicode.com/posts"
     );
-  }, [filter.query, sortedPosts]);
+    setPosts(response.data);
+  };
 
   return (
     <div className="app">
-      <PostForm addPost={addPost} />
+      <MyButton onClick={fetchPosts}>Fetch posts</MyButton>
+      <MyButton style={{ marginTop: 20 }} onClick={() => setVisibleModal(true)}>
+        Create post
+      </MyButton>
+      <MyModal visible={visibleModal} setVisible={setVisibleModal}>
+        <PostForm addPost={addPost} />
+      </MyModal>
       <hr style={{ margin: "20px 0px" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
       <PostList

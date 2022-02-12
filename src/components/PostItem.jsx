@@ -5,7 +5,7 @@ export const PostItem = ({index, post, deletePost}) => {
     <div className="post">
       <div className="post__content">
         <strong>{index + 1}. {post.title}</strong>
-        <div>{post.description}</div>
+        <div>{post.body}</div>
       </div>
       <div className="post__btns">
         <button onClick={() => deletePost(post.id)}>Delete</button>
