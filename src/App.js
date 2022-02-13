@@ -7,6 +7,7 @@ import { Modal } from "./components/ui/Modal/Modal";
 import { Button } from "./components/ui/Button/Button";
 import { usePosts } from "./hooks/usePosts";
 import { PostService } from "./api/PostService";
+import { Loader } from "./components/ui/Loader/Loader";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -52,7 +53,14 @@ function App() {
       <hr style={{ margin: "20px 0px" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
       {loading ? (
-        <h1>Loading</h1>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Loader />
+        </div>
       ) : (
         <PostList
           posts={sortedAndSearchedPosts}
