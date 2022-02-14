@@ -2,7 +2,11 @@ import React from 'react';
 import { PostItem } from './PostItem';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
-export const PostList = ({posts, title ,deletePost}) => {
+export const PostList = ({posts, title ,deletePost, error}) => {
+
+  if(error) {
+    return <h1 style={{ textAlign: "center" }}>Error of loading</h1>
+  }
 
   if (posts.length < 1) {
     return <h1 style={{ textAlign: "center" }}>Posts not found</h1>
