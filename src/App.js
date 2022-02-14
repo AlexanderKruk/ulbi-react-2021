@@ -11,6 +11,7 @@ import { Loader } from "./components/ui/Loader/Loader";
 import { useFetching } from "./hooks/useFetching";
 import { getPageCount } from "./utils/pages";
 import { useGetPages } from "./hooks/useGetPages";
+import { Pagination } from "./components/ui/Pagination/Pagination";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -34,8 +35,6 @@ function App() {
   useEffect(() => {
     postFetch();
   }, [page]);
-
-  const pages = useGetPages(totalPages);
 
   const addPost = (e, post) => {
     e.preventDefault();
@@ -74,17 +73,7 @@ function App() {
           error={error}
         />
       )}
-      <div className="page__wrapper">
-        {pages.map((item) => (
-          <span
-            className={page === item ? "page page__current" : "page"}
-            key={item}
-            onClick={() => setPage(item)}
-          >
-            {item}
-          </span>
-        ))}
-      </div>
+      <Pagination totalPages={totalPages} page={page} setPage={setPage} />
     </div>
   );
 }
