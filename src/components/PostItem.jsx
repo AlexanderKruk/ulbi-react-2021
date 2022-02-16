@@ -1,6 +1,9 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { Button } from './ui/Button/Button';
 
-export const PostItem = ({index, post, deletePost}) => {
+export const PostItem = ({post, deletePost}) => {
+  const history = useHistory()
   return(
     <div className="post">
       <div className="post__content">
@@ -8,7 +11,8 @@ export const PostItem = ({index, post, deletePost}) => {
         <div>{post.body}</div>
       </div>
       <div className="post__btns">
-        <button onClick={() => deletePost(post.id)}>Delete</button>
+        <Button onClick={() => history.push(`/post/${post.id}`)}>Open</Button>
+        <Button onClick={() => deletePost(post.id)}>Delete</Button>
       </div>
   </div>
   );

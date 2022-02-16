@@ -12,7 +12,7 @@ import { useFetching } from "../hooks/useFetching";
 import { getPageCount } from "../utils/pages";
 import { Pagination } from "../components/ui/Pagination/Pagination";
 
-export const Posts = () =>  {
+export const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState({ sort: "", query: "" });
   const [visibleModal, setVisibleModal] = useState(false);
@@ -20,7 +20,7 @@ export const Posts = () =>  {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
 
-  const [postFetch, isLoading, error] = useFetching(async () => {
+  const [postFetch, isLoading, error] = useFetching(async (page, limit) => {
     const response = await PostService.getAll(page, limit);
     if (response) {
       setPosts(response.data);
@@ -32,7 +32,7 @@ export const Posts = () =>  {
   const sortedAndSearchedPosts = usePosts(filter.sort, posts, filter.query);
 
   useEffect(() => {
-    postFetch();
+    postFetch(page, limit);
   }, [page]);
 
   const addPost = (e, post) => {
