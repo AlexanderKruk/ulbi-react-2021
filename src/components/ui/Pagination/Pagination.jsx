@@ -5,7 +5,6 @@ import styles from './Pagination.module.css'
 export const Pagination = ({totalPages, page, setPage}) => {
 
   const pages = useGetPages(totalPages);
-
   return (
     <div className={styles.wrapper}>
         {pages.map((item) => (

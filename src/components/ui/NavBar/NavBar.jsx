@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom'
+import { AuthContext } from '../../../context';
 
 export const NavBar = () => {
+  const {setIsAuth} = useContext(AuthContext)
+  const logout = () => {
+    setIsAuth(false)
+    localStorage.setItem('isAuth', false)
+  }
   return (
     <div className="navbar">
       <div className="navbar__links">
@@ -10,6 +16,9 @@ export const NavBar = () => {
         </Link>
         <Link to="/about" className="navbar__link">
           About
+        </Link>
+        <Link to="/about" className="navbar__link" onClick={logout}>
+          Logout
         </Link>
       </div>
     </div>

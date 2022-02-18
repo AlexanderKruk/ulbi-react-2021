@@ -17,22 +17,22 @@ export const Posts = () => {
   const [filter, setFilter] = useState({ sort: "", query: "" });
   const [visibleModal, setVisibleModal] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
-  const [limit, setLimit] = useState(10);
+  const [limit ] = useState(10);
   const [page, setPage] = useState(1);
 
-  const [postFetch, isLoading, error] = useFetching(async (page, limit) => {
+  const [postsFetch, isLoading, error] = useFetching(async () => {
     const response = await PostService.getAll(page, limit);
     if (response) {
-      setPosts(response.data);
       const totalCount = response.headers["x-total-count"];
       setTotalPages(getPageCount(totalCount, limit));
+      setPosts(response.data);
     }
   });
 
   const sortedAndSearchedPosts = usePosts(filter.sort, posts, filter.query);
 
   useEffect(() => {
-    postFetch(page, limit);
+    postsFetch();
   }, [page]);
 
   const addPost = (e, post) => {
@@ -55,7 +55,13 @@ export const Posts = () => {
       </Modal>
       <hr style={{ margin: "20px 0px" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
-      {isLoading ? (
+      <PostList
+          posts={sortedAndSearchedPosts}
+          title={"List of posts"}
+          deletePost={deletePost}
+          error={error}
+        />
+      {isLoading && (
         <div
           style={{
             display: "flex",
@@ -64,13 +70,6 @@ export const Posts = () => {
         >
           <Loader />
         </div>
-      ) : (
-        <PostList
-          posts={sortedAndSearchedPosts}
-          title={"List of posts"}
-          deletePost={deletePost}
-          error={error}
-        />
       )}
       <Pagination totalPages={totalPages} page={page} setPage={setPage} />
     </div>
